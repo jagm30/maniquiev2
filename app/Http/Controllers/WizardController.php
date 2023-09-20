@@ -3,7 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Cobro;
+use App\helpers\convertidor;
+use Illuminate\Support\Facades\DB;
+use Validator;
+use Carbon\Carbon;
+use App\Cuentaasignada;
+use App\Cicloescolar;
+use App\Planpago;
+use App\Nivelescolar;
+use App\Grupo;
+use App\Alumno;
+use App\Grupoalumno;
+use App\Planpagoconcepto;
+use App\Conceptocobro;
+use App\Http\Requests\StoreAlumnos;
+use App\Beca;
+use App\Descuento;
+use PDF;
+use App\Exports\DeudoresExport;
+use App\Exports\CobrosExportView;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Cobroparcial;
+use App\Cobrocancelado;
 
+//use Carbon\Carbon;
 class WizardController extends Controller
 {
     /**
@@ -13,7 +37,8 @@ class WizardController extends Controller
      */
     public function index()
     {
-        //
+        $cicloescolars  = DB::table('cicloescolars')->where('id','!=',session('session_cart'))->get();
+        return view('wizard.index', compact('cicloescolars'));
     }
 
     /**

@@ -42,6 +42,10 @@ Route::resource('cicloescolar', 'CicloescolarController');
 
 Route::resource('nivelescolar', 'NivelescolarController');
 
+Route::get('grupos/listarxciclo/{id}','GrupoController@listarxciclo')->name('listarxciclo');
+
+Route::get('grupos/guardargrupo/{datos}','GrupoController@guardargrupo')->name('guardargrupo');
+
 Route::resource('grupos', 'GrupoController');
 ////reportess PDF
 Route::get('/grupoalumnos/print-pdf/{id}', [ 'as' => 'grupoalumnos.printpdf', 'uses' => 'GrupoalumnoController@printPDF']);
@@ -132,6 +136,7 @@ Route::resource('descuentos', 'DescuentoController');
 Route::get('usuarios/consultaemail/{email}','UsuarioController@consultaEmail')->name('consultaemail');
 
 Route::resource('usuarios', 'UsuarioController');
+Route::resource('wizard', 'WizardController');
 
 Auth::routes();
 

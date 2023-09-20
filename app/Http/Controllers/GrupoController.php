@@ -160,4 +160,50 @@ class GrupoController extends Controller
             return redirect("/grupos");
         }
     }
+    public function listarxciclo(Request $request, $id_ciclo_escolar){
+        
+        $grupos = DB::table('grupos')
+            ->select('grupos.id AS id_grupo','descripcion','cupo_maximo','turno','clave_identificador','grado_semestre','diferenciador_grupo','denominacion_grado')
+            ->leftjoin('grupoalumnos', 'grupos.id', '=', 'grupoalumnos.id_grupo')
+            ->join('nivelescolars', 'grupos.id_nivel_escolar', '=', 'nivelescolars.id')
+            ->join('cicloescolars', 'grupos.id_ciclo_escolar', '=', 'cicloescolars.id')
+            ->where('grupos.id_ciclo_escolar',$id_ciclo_escolar)
+            ->groupBy('grupos.id','descripcion','cupo_maximo','turno','clave_identificador','grado_semestre','diferenciador_grupo','denominacion_grado')
+            ->orderBy('clave_identificador')
+            ->get();
+
+            return response()->json(['data' => $grupos]);
+    }
+    public function guardargrupo(Request $request, $datos){
+        $id_session_ciclo   = session('session_cart');
+        $contador = 0;
+        //$array = response()->json($datos);
+        $array = json_decode($datos);
+
+       /* foreach ($array->datos as $row) {
+            
+            $cobro = new Cobro; 
+            $cobro->id_alumno               = $row->id_alumno;
+            $cobro->id_user                 = $row->id_usuario;
+            $cobro->id_ciclo_escolar        = $id_session_ciclo;
+            $cobro->id_cuenta_asignada      = $row->id_cuenta_asignada;
+            $cobro->id_planpagoconcepto     = $row->id_planpagoconceptos;
+            $cobro->cantidad_inicial        = $row->cantidad_inicial;
+            $cobro->descuento_pp            = $row->descuento_pp;
+            $cobro->descuento_adicional     = $row->descuento_adicional;
+            $cobro->recargo                 = $row->recargo;
+            $cobro->fecha_pago              = $row->fecha_pago;
+            $cobro->tipo_pago               = 'completo';
+            $cobro->cantidad                = $row->cantidad;
+            $cobro->forma_pago              = $row->forma_pago;
+            $cobro->status                  = 'pagado';
+            $cobro->save();
+            $contador++;
+
+            $cuentaasignada = Cuentaasignada::find($row->id_cuenta_asignada);
+            $cuentaasignada->status   = 'pagado';            
+            $cuentaasignada->save();
+        }*/
+        return response()->json(['data' => "Grupos correctamente:".$array]); 
+    }
 }
