@@ -46,6 +46,8 @@ Route::get('grupos/listarxciclo/{id}','GrupoController@listarxciclo')->name('lis
 
 Route::get('grupos/guardargrupo/{datos}','GrupoController@guardargrupo')->name('guardargrupo');
 
+Route::get('grupos/transferirgrupoalumno/{grupoant}/{grupoact}','GrupoController@transferirgrupoalumno')->name('transferirgrupoalumno');
+
 Route::resource('grupos', 'GrupoController');
 ////reportess PDF
 Route::get('/grupoalumnos/print-pdf/{id}', [ 'as' => 'grupoalumnos.printpdf', 'uses' => 'GrupoalumnoController@printPDF']);
@@ -59,6 +61,8 @@ Route::post('grupoalumnos/update', 'GrupoalumnoController@update')->name('grupoa
 Route::get('grupoalumnos/destroy/{id}', 'GrupoalumnoController@destroy');
 
 Route::resource('conceptocobro', 'ConceptocobroController');
+
+Route::get('planpago/listarplanxciclo/{id_ciclo}','PlanpagoController@listarplanxciclo')->name('listarplanxciclo');
 
 Route::resource('planpago', 'PlanpagoController');
 

@@ -37,6 +37,7 @@ class WizardController extends Controller
      */
     public function index()
     {   
+
         $grupos = DB::table('grupos')
             ->select('grupos.id AS id_grupo','descripcion','cupo_maximo','turno','clave_identificador','grado_semestre','diferenciador_grupo','denominacion_grado')
             ->leftjoin('grupoalumnos', 'grupos.id', '=', 'grupoalumnos.id_grupo')
@@ -47,7 +48,10 @@ class WizardController extends Controller
             ->orderBy('clave_identificador')
             ->get();
         $cicloescolars  = DB::table('cicloescolars')->where('id','!=',session('session_cart'))->get();
-        return view('wizard.index', compact('cicloescolars', 'grupos'));
+
+        $planpagos =  Planpago::where('id_ciclo_escolar',session('session_cart'))
+                    ->get();
+        return view('wizard.index', compact('cicloescolars', 'grupos','planpagos'));
     }
 
     /**

@@ -120,4 +120,22 @@ class PlanpagoController extends Controller
             return redirect("/planpago");
         }  
     }
+
+    public function listarplanxciclo(Request $request, $id_ciclo){
+        if(request()->ajax()){
+            return datatables()->of(DB::table('planpagos')
+                ->select('id','codigo','descripcion','periocidad')
+                ->where('id_ciclo_escolar',$id_ciclo)
+                ->get())
+            ->addColumn('action', function($data){
+                    $button = '<a href="/grupoalumnos/'.$data->id.'"><button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Copiar</button></a>';
+                    $button .= '&nbsp;&nbsp;';
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
+
+    }
 }

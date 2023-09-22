@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Grupo;
 use App\Cicloescolar;
 use App\Nivelescolar;
-
+use App\Grupoalumno;
 use App\Exports\GruposExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -195,5 +195,22 @@ class GrupoController extends Controller
             $grupo->save();            
         }
         return response()->json(['data' => "Grupos agregados correctamente:".$contador]); 
+    }
+    public function transferirgrupoalumno(Request $request, $grupoant, $grupoact){
+        $contador = 0;
+        $alumnos      =  DB::table('grupoalumnos')
+                ->select('id_grupo','id_alumno')                
+                ->where('id_grupo',$grupoant)
+                ->get();
+        foreach ($alumnos as $alumno) {
+            $contador ++;
+            $grupoalumno = new Grupoalumno;
+            $grupoalumno->id_alumno     = $alumno->id_alumno;
+            $grupoalumno->id_grupo      = $grupoact;
+            $grupoalumno->status        = 'activo';  
+            $grupoalumno->id_ciclo_escolar = session('session_cart');
+            $grupoalumno->save();
+        }
+        return response()->json(['data' => "Alumnos agregados correctamente:".$contador]); 
     }
 }

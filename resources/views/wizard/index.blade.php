@@ -21,7 +21,7 @@
             <ul class="nav nav-tabs">
               <li class="active"><a href="#tab_1" data-toggle="tab">Grupos vacios</a></li>
               <li><a href="#tab_2" data-toggle="tab">Inscribir alumnos</a></li>
-              <li><a href="#tab_3" data-toggle="tab">Asignar cuentas</a></li>
+              <li><a href="#tab_3" data-toggle="tab">Planes de pagos</a></li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   Dropdown <span class="caret"></span>
@@ -73,23 +73,79 @@
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane" id="tab_2">
-                The European languages are members of the same family. Their separate existence is a myth.
-                For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                new common language would be desirable: one could refuse to pay expensive translators. To
-                achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                words. If several languages coalesce, the grammar of the resulting language is more simple
-                and regular than that of the individual languages.
+                <b>Copiar alumnos del ciclo:</b>
+                <select class="form-control" id="ciclo_escolar_ga" name="ciclo_escolar_ga">
+                  <option>seleccione un ciclo escolar anterior</option>
+                  @foreach($cicloescolars as $cicloescolar) 
+                    <option value="{{ $cicloescolar->id }}">{{ $cicloescolar->descripcion }}</option>
+                  @endforeach
+                </select>
+                <div class="row">
+                  <div class="col-xs-4">
+                    <h4>Grupos anteriores:</h4>
+                    <div class="form-group" id="contenedorgruposanta"  name="contenedorgruposanta">
+                      <select class="form-control" id="gruposantealum" name="gruposantealum"> 
+                          <option>Seleccione un grupo anterior</option>                          
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-4" >
+                    <h4> -> Grupo a donde se inscribirán:</h4>
+                    <div class="form-group" style="color:green;" id="contenedorgruposactualesa">
+                      <select class="form-control" id="grupoactualcopia" name="grupoactualcopia"> 
+                        <option>Seleccione un grupo actual</option>
+                        @foreach($grupos as $grupo)
+                          <option value="{{ $grupo->id_grupo }}">{{ $grupo->clave_identificador }}/ {{ $grupo->grado_semestre }} {{ $grupo->diferenciador_grupo }} {{ $grupo->turno }}</option>
+                        @endforeach
+                      </select>
+                    </div>                                                        
+                  </div>                   
+                  <div class="col-xs-4">
+                    <h4> -> Procesar:</h4>
+                    <button class="form-control btn-success" id="btn_registraralumnos" name="btn_registraralumnos">Copiar Grupos Vacios</button>
+
+                    <br>
+                    <b>Este proceso copiara los alumnos del grupos anterior hacia el grupo actual seccionado.</b>
+                    <br>
+
+                    <div class="col-xs-12" id="mensajediv" name="mensajediv"></div>
+                  </div>
+                </div>   
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane" id="tab_3">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                like Aldus PageMaker including versions of Lorem Ipsum.
+                <b>Copiar grupos del ciclo:</b>
+                <select class="form-control" id="ciclo_escolarpp" name="ciclo_escolarpp">
+                  <option>seleccione un ciclo escolar anterior</option>
+                  @foreach($cicloescolars as $cicloescolar) 
+                    <option value="{{ $cicloescolar->id }}">{{ $cicloescolar->descripcion }}</option>
+                  @endforeach
+                </select>
+                <div class="row">
+
+                  <div class="col-xs-12" >
+                    <table id="tabplanpago" class="table table-bordered table-striped">
+                      <thead>
+                      <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Periodicidad</th>
+                        <th>Funciones</th>
+                      </tr>
+                      </thead>
+                     
+                      <tfoot>
+                      <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Periodicidad</th>
+                        <th>Funciones</th>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>                   
+                  
+                </div>  
               </div>
               <!-- /.tab-pane -->
             </div>
@@ -105,6 +161,7 @@
 @section("scriptpie")
 <script>
   $(document).ready(function(){
+    
     $('#ciclo_escolar').on('change', function() {
         $("#contenedorgruposant").html("");
         $.ajax({
@@ -160,6 +217,88 @@
         })
 
     });
+
+    //tab 2
+    $('#ciclo_escolar_ga').on('change', function() {
+        $("#gruposantealum").html("");
+        $.ajax({
+          url:"/grupos/listarxciclo/"+$(this).val(),
+          dataType:"json",
+          success:function(html){            
+
+            for (var i = 0; i < html.data.length; i++){
+              $("#gruposantealum").append('<option value="'+html.data[i].id_grupo+'">'+html.data[i].clave_identificador+' / '+html.data[i].grado_semestre+'  '+html.data[i].diferenciador_grupo+'  '+html.data[i].turno+'</option>');
+            }
+          }
+        });
+    });
+    //funcion para copiar los alumnos de un ciclo a otro
+$('#btn_registraralumnos').click(function() {    
+
+    var  grupoanterior  = $('#gruposantealum').val();
+    var grupoactual     = $('#grupoactualcopia').val();
+
+    $.ajax({
+         url:"/grupos/transferirgrupoalumno/"+grupoanterior+"/"+grupoactual,
+         dataType:"json",
+         async: false,
+         contentType: "application/json",
+         success:function(html){
+          alert(html.data);
+            //$("#mensajediv").append('<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> <h4><i class="icon fa fa-check"></i> Alert!</h4>'+html.data+'</div>');
+          //actualizar grupos actuales en wizard
+            /*$("#contenedorgruposactuales").html("");
+            $.ajax({
+              url:"/grupos/listarxciclo/"+{{ session('session_cart') }},
+              dataType:"json",
+              success:function(html){            
+                for (var i = 0; i < html.data.length; i++){
+                  $("#contenedorgruposactuales").append('<div><label>'+html.data[i].clave_identificador+' / '+html.data[i].grado_semestre+'  '+html.data[i].diferenciador_grupo+'  '+html.data[i].turno+'</label></div>');
+                }
+              }
+            });*/
+            //actualizar grupos actuales
+         }
+      })
+
+    });
+
+  //tab 3, planes de pago
+    $('#ciclo_escolarpp').on('change', function() {
+      var table = $('#tabplanpago').DataTable();
+      //clear datatable
+      table.clear().draw();
+      //destroy datatable
+      table.destroy();
+      //$("#tabplanpago").empty();        
+        $('#tabplanpago').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax:{
+            url: "planpago/listarplanxciclo/"+$(this).val()
+          },
+          columns:[
+            {
+              data: 'codigo',
+              name: 'codigo'
+            },
+            {
+              data: 'descripcion',
+              name: 'descripcion'
+            },
+            {
+              data: 'periocidad',
+              name: 'periocidad'
+            },
+            {
+            data: 'action',
+            name: 'action',
+            orderable: false
+            }
+          ]
+        });
+    });
+
   });
 
 </script>
