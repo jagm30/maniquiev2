@@ -175,35 +175,25 @@ class GrupoController extends Controller
             return response()->json(['data' => $grupos]);
     }
     public function guardargrupo(Request $request, $datos){
-        $id_session_ciclo   = session('session_cart');
+
         $contador = 0;
         //$array = response()->json($datos);
         $array = json_decode($datos);
 
-       /* foreach ($array->datos as $row) {
-            
-            $cobro = new Cobro; 
-            $cobro->id_alumno               = $row->id_alumno;
-            $cobro->id_user                 = $row->id_usuario;
-            $cobro->id_ciclo_escolar        = $id_session_ciclo;
-            $cobro->id_cuenta_asignada      = $row->id_cuenta_asignada;
-            $cobro->id_planpagoconcepto     = $row->id_planpagoconceptos;
-            $cobro->cantidad_inicial        = $row->cantidad_inicial;
-            $cobro->descuento_pp            = $row->descuento_pp;
-            $cobro->descuento_adicional     = $row->descuento_adicional;
-            $cobro->recargo                 = $row->recargo;
-            $cobro->fecha_pago              = $row->fecha_pago;
-            $cobro->tipo_pago               = 'completo';
-            $cobro->cantidad                = $row->cantidad;
-            $cobro->forma_pago              = $row->forma_pago;
-            $cobro->status                  = 'pagado';
-            $cobro->save();
-            $contador++;
+        foreach ($array->datos as $row) {
+            $contador ++;
+            $grupoactual = Grupo::find($row->id_grupo);
 
-            $cuentaasignada = Cuentaasignada::find($row->id_cuenta_asignada);
-            $cuentaasignada->status   = 'pagado';            
-            $cuentaasignada->save();
-        }*/
-        return response()->json(['data' => "Grupos correctamente:".$array]); 
+            $grupo = new Grupo;            
+            $grupo->id_ciclo_escolar    = session('session_cart');
+            $grupo->cupo_maximo         = $grupoactual->cupo_maximo;
+            $grupo->turno               = $grupoactual->turno;
+            $grupo->id_nivel_escolar    = $grupoactual->id_nivel_escolar;
+            $grupo->grado_semestre      = $grupoactual->grado_semestre;
+            $grupo->diferenciador_grupo = $grupoactual->diferenciador_grupo;
+            $grupo->status              = 'activo';
+            $grupo->save();            
+        }
+        return response()->json(['data' => "Grupos agregados correctamente:".$contador]); 
     }
 }

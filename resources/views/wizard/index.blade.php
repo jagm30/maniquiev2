@@ -46,17 +46,29 @@
                   @endforeach
                 </select>
                 <div class="row">
-                  <div class="col-xs-6" >
+                  <div class="col-xs-4">
+                    <h4>Grupos actuales:</h4>
+                    <div class="form-group" style="color:green;" id="contenedorgruposactuales">
+                      @foreach($grupos as $grupo)
+                        <div class="checkbox"><label>{{ $grupo->clave_identificador }}/ {{ $grupo->grado_semestre }} {{ $grupo->diferenciador_grupo }} {{ $grupo->turno }}</label></div>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="col-xs-4" >
+                    <h4>Seleccione los grupos que desea copiar:</h4>
                     <div class="form-group" id="contenedorgruposant"  name="contenedorgruposant">
                       
                     </div>
-                  </div> 
-                  <div class="col-xs-6">
+                  </div>                   
+                  <div class="col-xs-4">
                     <button class="form-control btn-success" id="btn_registrar" name="btn_registrar">Copiar Grupos Vacios</button>
 
                     <br>
-                    Este proceso copiara los grupos hacia el ciclo actual, los grupos se exportaran vacios.
-                  </div> 
+                    <b>Este proceso copiara los grupos hacia el ciclo actual, los grupos se importaran vacios.</b>
+                    <br>
+
+                    <div class="col-xs-12" id="mensajediv" name="mensajediv"></div>
+                  </div>
                 </div>                
               </div>
               <!-- /.tab-pane -->
@@ -94,11 +106,11 @@
 <script>
   $(document).ready(function(){
     $('#ciclo_escolar').on('change', function() {
-        //alert( $(this).find(":selected").val() );
+        $("#contenedorgruposant").html("");
         $.ajax({
-          url:"/grupos/listarxciclo/4",
+          url:"/grupos/listarxciclo/"+$(this).val(),
           dataType:"json",
-          success:function(html){
+          success:function(html){            
             for (var i = 0; i < html.data.length; i++){
               $("#contenedorgruposant").append('<div class="checkbox"><label><input type="checkbox" name="opciones[]" value="'+html.data[i].id_grupo+'">'+html.data[i].clave_identificador+' / '+html.data[i].grado_semestre+'  '+html.data[i].diferenciador_grupo+'  '+html.data[i].turno+'</label></div>');
             }
@@ -106,13 +118,12 @@
         });
     });
 
-    $('#btn_registrar').click(function() {
-      alert("ok");
+    $('#btn_registrar').click(function() {      
       var selected            = [];
       var  list = {
         'datos' :[]
       };
-
+      // SE COLOCAN EN UN ARREGLO LOS GRUPOS SELECCIONADOS
       $("input:checkbox[name='opciones[]']").each(function() {
         if (this.checked) {
           // agregas cada elemento.
@@ -121,27 +132,32 @@
             "id_grupo": $(this).val()   
           });          
         }
-      });
+      })
       json = JSON.stringify(list); // aqui tienes la lista de objetos en Json
       var obj = JSON.parse(json); //Parsea el Json al objeto anterior.
-      alert(json);
 
-    // registrar grupos seleccionados
-    $.ajax({
-         url:"/grupos/guardargrupo/"+json,
-         dataType:"json",
-         async: false,
-         contentType: "application/json",
-         success:function(html){
-            alert(html);
-       
-            //
-            //$("#formmodal")[0].reset();
-           // $('#modal-success').modal('toggle');
-         }
-      })
-
-
+      // SE REGISTRAN LOS GRUPOS DEL ARREGLO
+      $.ajax({
+           url:"/grupos/guardargrupo/"+json,
+           dataType:"json",
+           async: false,
+           contentType: "application/json",
+           success:function(html){
+              $("#mensajediv").append('<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> <h4><i class="icon fa fa-check"></i> Alert!</h4>'+html.data+'</div>');
+            //actualizar grupos actuales en wizard
+              $("#contenedorgruposactuales").html("");
+              $.ajax({
+                url:"/grupos/listarxciclo/"+{{ session('session_cart') }},
+                dataType:"json",
+                success:function(html){            
+                  for (var i = 0; i < html.data.length; i++){
+                    $("#contenedorgruposactuales").append('<div><label>'+html.data[i].clave_identificador+' / '+html.data[i].grado_semestre+'  '+html.data[i].diferenciador_grupo+'  '+html.data[i].turno+'</label></div>');
+                  }
+                }
+              });
+              //actualizar grupos actuales
+           }
+        })
 
     });
   });
