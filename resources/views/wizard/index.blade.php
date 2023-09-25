@@ -156,6 +156,109 @@
         </div>
     </div>
   </div>
+   <div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal-title">Default Modal</h4>
+      </div>
+      <span id="form_result"></span>
+      <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="table-responsive">
+              <table id="grupoalumnos_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Concepto del cobro</th>
+                  <th>Año al que corresponde</th>
+                  <th>Mes a pagar</th>
+                  <th>Costo</th>
+                  <th  width="170">Funciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+              </table>
+            </div>
+          <div class="form-group">
+            <label class="control-label col-md-4" >Concepto: </label>
+            <div class="col-md-8">
+              <span id="nombre_alumno"></span>
+              <select name="id_concepto_cobro" id="id_concepto_cobro" class="form-control" required >
+                <option value="">Seleccione una opción</option>
+               
+              </select>
+            </div>
+           </div>
+           <div class="form-group">
+            <label class="control-label col-md-4" >Año al que corresponde: </label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="anio_corresponde" id="anio_corresponde" required>
+            </div>
+           </div> 
+           <div class="form-group">
+            <label class="control-label col-md-4" >Mes a pagar: </label>
+            <div class="col-md-8">
+              <select class="form-control" name="mes_pagar" id="mes_pagar" required>
+                <option value="">Seleccione</option>
+                <option>ENERO</option>
+                <option>FEBRERO</option>
+                <option>MARZO</option>
+                <option>ABRIL</option>
+                <option>MAYO</option>
+                <option>JUNIO</option>
+                <option>JULIO</option>
+                <option>AGOSTO</option>
+                <option>SEPTIEMBRE</option>
+                <option>OCTUBRE</option>
+                <option>NOVIEMBRE</option>
+                <option>DICIEMBRE</option>
+              </select>
+            </div>
+           </div>  
+           <div class="form-group">
+            <label class="control-label col-md-4" >Parcialidad: </label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="no_parcialidad" id="no_parcialidad" required>
+            </div>
+           </div>  
+           <div class="form-group">
+            <label class="control-label col-md-4" >Periodo de inicio: </label>
+            <div class="col-md-8">
+              <input type="date" class="form-control" name="periodo_inicio" id="periodo_inicio" required>
+            </div>
+           </div> 
+           <div class="form-group">
+            <label class="control-label col-md-4" >Periodo de vencimiento: </label>
+            <div class="col-md-8">
+              <input type="date" class="form-control" name="periodo_vencimiento" id="periodo_vencimiento" required>
+            </div>
+           </div> 
+           <div class="form-group">
+            <label class="control-label col-md-4" >Cantidad a pagar: </label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="cantidad" id="cantidad" required>
+            </div>
+           </div>                      
+
+            <input type="hidden" name="action" id="action" />
+            <input type="hidden" name="hidden_id" id="hidden_id" />
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+        <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Agregar">
+      </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 @endsection("contenidoprincipal")
 @section("scriptpie")
@@ -245,19 +348,7 @@ $('#btn_registraralumnos').click(function() {
          contentType: "application/json",
          success:function(html){
           alert(html.data);
-            //$("#mensajediv").append('<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> <h4><i class="icon fa fa-check"></i> Alert!</h4>'+html.data+'</div>');
-          //actualizar grupos actuales en wizard
-            /*$("#contenedorgruposactuales").html("");
-            $.ajax({
-              url:"/grupos/listarxciclo/"+{{ session('session_cart') }},
-              dataType:"json",
-              success:function(html){            
-                for (var i = 0; i < html.data.length; i++){
-                  $("#contenedorgruposactuales").append('<div><label>'+html.data[i].clave_identificador+' / '+html.data[i].grado_semestre+'  '+html.data[i].diferenciador_grupo+'  '+html.data[i].turno+'</label></div>');
-                }
-              }
-            });*/
-            //actualizar grupos actuales
+
          }
       })
 
@@ -298,6 +389,36 @@ $('#btn_registraralumnos').click(function() {
           ]
         });
     });
+
+    //al dar clic en el boton copiar, despegar la ventana modal
+    $(document).on('click', '.edit', function(){
+      var id = $(this).attr('id');
+      alert(id);
+      $('#form_result').html('');
+     // $('#inputId').prop('readonly', true);
+     // $("#id_alumno").attr("readonly","readonly");
+      //$("#id_alumno").hide();
+      //$("#nombre_alumno").show();
+     // $("#cont_grupo").show();    
+    /*  $.ajax({
+       url:"/planpagoconcepto/"+id+"/edit",
+       dataType:"json",
+       success:function(html){
+          $('#id_concepto_cobro').val(html.data.id_concepto_cobro);
+          $('#anio_corresponde').val(html.data.anio_corresponde);
+          $('#mes_pagar').val(html.data.mes_pagar);
+          $('#no_parcialidad').val(html.data.no_parcialidad);
+          $('#periodo_inicio').val(html.data.periodo_inicio);
+          $('#periodo_vencimiento').val(html.data.periodo_vencimiento);
+          $('#cantidad').val(html.data.cantidad);
+          $('#hidden_id').val(html.data.id);
+          $('#modal-title').text("Editar concepto");
+          $('#action_button').val("Guardar");
+          $('#action').val("Edit");          
+       }
+      })*/
+     });
+
 
   });
 

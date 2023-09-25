@@ -128,7 +128,7 @@ class PlanpagoController extends Controller
                 ->where('id_ciclo_escolar',$id_ciclo)
                 ->get())
             ->addColumn('action', function($data){
-                    $button = '<a href="/grupoalumnos/'.$data->id.'"><button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Copiar</button></a>';
+                    $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">Copiar as</button>';
                     $button .= '&nbsp;&nbsp;';
                     return $button;
                 })
