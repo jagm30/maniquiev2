@@ -64,6 +64,8 @@ Route::resource('conceptocobro', 'ConceptocobroController');
 
 Route::get('planpago/listarplanxciclo/{id_ciclo}','PlanpagoController@listarplanxciclo')->name('listarplanxciclo');
 
+Route::get('planpago/clonar/{id_plan}/{codigo}/{desc}/{per}','PlanpagoController@clonarplan')->name('clonarplan');
+
 Route::resource('planpago', 'PlanpagoController');
 
 Route::resource('planpagoconcepto', 'PlanpagoconceptoController');
