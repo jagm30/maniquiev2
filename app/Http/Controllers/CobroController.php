@@ -688,7 +688,7 @@ class CobroController extends Controller
           $cobros = Cobro::where('id',$id_cobro )
                   ->update(['status' => 'cancelado']);
           
-          return response()->json(['data' => 'Cancelado correctamente']);  
+          return redirect('/cobros/reporte/');  
       }else{
           $id_cobro       = $cobro_consulta->id;
           $id_cta_asignada= $cobro_consulta->id_cuenta_asignada;
@@ -705,15 +705,15 @@ class CobroController extends Controller
 
           $cobrosparciales = Cobroparcial::where(['id_cuenta_asignada'=> $id_cta_asignada, 'fecha_pago'=>$fecha_pago, 'cantidad_abonada'=>$cantidad])
                   ->update(['status' => 'cancelado']);
-          $countcobrosparciales = Cobroparcial::where(['id_cuenta_asignada'=> $id_cta_asignada,'status'=>'activo'])->get();
+          $countcobrosparciales = Cobroparcial::where(['id_cuenta_asignada'=> $id_cta_asignada,'status'=>'abonado'])->get();
           $contador = $countcobrosparciales->count();
 
           if($contador==0){
             $cuentaasignada = Cuentaasignada::find($id_cta_asignada);
-            $cuentaasignada->status   = 'activo';
+            $cuentaasignada->status   = 'abonado';
             $cuentaasignada->save();
           }
-          return response()->json(['data' => 'Abono Cancelado correctamente']);
+          return redirect('/cobros/reporte/');
       }
       
     }

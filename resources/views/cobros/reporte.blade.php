@@ -173,7 +173,7 @@
                 linkcacelar = '';
               }else{
                 estilo='';
-                linkcacelar = '<a href="/cobros/cancelar/'+html.cobros[i].id_cobro+'/system">cancelar</a>';
+                linkcacelar = '<a onclick="return ConfirmDelete()" href="/cobros/cancelar/'+html.cobros[i].id_cobro+'/system" >cancelar</a>';
               }
               $("#conttable").append('<tr style="font-size:9pt;'+estilo+'"><td>'+html.cobros[i].id_cobro+'</td><td>'+html.cobros[i].apaterno+' '+html.cobros[i].amaterno+' '+html.cobros[i].nombres+'</td><td>'+html.cobros[i].descripcion+'</td><td>'+formatted_date+'</td><td>$ '+number_format(parseFloat(html.cobros[i].cantidad),2,'.',',')+'</td><td>'+codigo+'<br> '+cant_beca+ ' ' +signodesc+'</td><td>'+html.cobros[i].descuento_pp+'</td><td>'+html.cobros[i].descuento_adicional+'</td><td>'+html.cobros[i].recargo+'</td><td>'+html.cobros[i].tipo_pago+'</td><td style="width:100px;">$ '+number_format(cantidad_pagada,2,'.',',') +'</td><td style="width:80px;">'+html.cobros[i].forma_pago+'</td><td>'+html.cobros[i].status+'</td><td>'+linkcacelar+'</td></tr>');
               	 
@@ -199,7 +199,12 @@
         return x1 + x2;
     }
 })
-
+function ConfirmDelete()
+{
+  return confirm("Deseas cancelar el cobro?");
+  //var result = confirm("Want to delete?");
+  
+}
 
     
 
