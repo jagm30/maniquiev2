@@ -91,6 +91,7 @@
                 <li><a href="/cobros/deudores/">Deudores</a></li>
               </ul>
             </li>
+            <li><a href="/wizard">Wizard</a></li>
             @if (Auth::user()->hasRole("admin"))
              <!-- <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin<span class="caret"></span></a>

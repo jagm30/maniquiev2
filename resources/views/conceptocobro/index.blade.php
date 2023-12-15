@@ -22,7 +22,6 @@
               <tr>
                 <th>Código</th>
                 <th>Descripción</th>
-                <th>Precio regular</th>
                 
                 <th>Funciones</th>
               </tr>
@@ -32,7 +31,7 @@
                 <tr>
                   <td>{{ $conceptocobro->codigo }}</td>
                   <td>{{ $conceptocobro->descripcion }}</td>
-                  <td>$ {{ number_format($conceptocobro->precio_regular,2) }}</td>
+                  <!--<td>$ {{ number_format($conceptocobro->precio_regular,2) }}</td>-->
                   <td><a href="{{ route('conceptocobro.edit',$conceptocobro->id) }}"><button type="button" class="btn btn-primary btn-xs" style="width:70px; ">Editar</button></a><br>
                         <a href="#" onclick="return confirm('Desea eliminar el registro');">
                           <form role="form" method="post" action="/conceptocobro/{{ $conceptocobro->id}}" >
@@ -49,8 +48,6 @@
               <tr>
                 <th>Código</th>
                 <th>Descripción</th>
-                <th>Precio regular</th>
-                
                 <th>Funciones</th>
               </tr>
               </tfoot>

@@ -24,10 +24,10 @@
           <div class="box-body">
             <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_1" data-toggle="tab">Grupos vacios</a></li>
-              <li><a href="#tab_2" data-toggle="tab">Inscribir alumnos</a></li>
-              <li><a href="#tab_3" data-toggle="tab">Planes de pagos</a></li>
-              <li><a href="#tab_4" data-toggle="tab">Asignación de cuentas</a></li>                            
+              <li class="active"><a href="#tab_1" data-toggle="tab">1. Grupos</a></li>
+              <li><a href="#tab_2" data-toggle="tab">2. Inscripción</a></li>
+              <li><a href="#tab_3" data-toggle="tab">3. Planes de pagos</a></li>
+              <li><a href="#tab_4" data-toggle="tab">4. Asignación de cuentas</a></li>                            
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="tab_1">

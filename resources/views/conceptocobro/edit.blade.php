@@ -38,12 +38,14 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-6">
+                  <!--<div class="col-xs-6">
                     <div class="form-group">
                       <label for="exampleInputPassword1">Precio regular</label>
                       <input type="text" class="form-control" id="precio_regular" name="precio_regular"  placeholder="Precio regular" value="{{ $conceptocobro->precio_regular }}" required >
                     </div>
                   </div>
+                -->
+                <input type="hidden" class="form-control" id="precio_regular" name="precio_regular"  placeholder="Precio regular" value="{{ $conceptocobro->precio_regular }}" required >
                   <div class="col-xs-6">   
                     <div class="form-group">
                       <label for="exampleInputPassword1">Impuesto</label>
