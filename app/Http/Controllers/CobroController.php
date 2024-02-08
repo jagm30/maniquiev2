@@ -602,6 +602,7 @@ class CobroController extends Controller
                 ->where('cuentaasignadas.id_alumno',$id)
                 ->where('cuentaasignadas.id_ciclo_escolar',$id_session_ciclo)
                 ->distinct('cuentaasignadas.id')
+                ->orderBy('conceptocobros.id', 'ASC')
                 ->get();
                 $descuento = DB::table('descuentos')
                 ->select('id','id_cuentaasignada','id_alumno','id_ciclo_escolar','cantidad as cant_desc','observaciones','status','id_usuario')
