@@ -687,7 +687,7 @@
                   descuento_pp        = html2.dato.descuento_pp;
                   descuento_condonacion = html2.dato.descuento_adicional;
                   recargos            = html2.dato.recargo;
-                  status_cta          = "Pagado";
+                  status_cta          = "pagado";
                   /*Descuento de becas*/
                   if(html2.dato2.porc_o_cant=='porcentaje'){
                     descuento_beca = (html2.dato2.cant_desc_beca* html2.dato2.cantidad)/100;
