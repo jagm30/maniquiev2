@@ -200,6 +200,7 @@ class CobroController extends Controller
           ->whereDate('cobros.fecha_pago','>=',$fecha1)
           ->whereDate('cobros.fecha_pago','<=',$fecha2)
           ->where('cobros.id_ciclo_escolar',$id_session_ciclo)
+          ->groupBy('id_cobro')
           ->get();
 
         $cobrosparciales = DB::table('cobroparcials')->select('cobroparcials.id','cobroparcials.id_alumno','cobroparcials.id_ciclo_escolar','cobroparcials.id_cuenta_asignada','cobroparcials.id_planpagoconcepto','cobroparcials.cantidad_inicial','cobroparcials.descuento_pp','cobroparcials.descuento_adicional','cobroparcials.recargo','cobroparcials.fecha_pago','cobroparcials.cantidad_abonada','cobroparcials.forma_pago','cobroparcials.status')
@@ -220,7 +221,7 @@ class CobroController extends Controller
         //
         $id_session_ciclo   = session('session_cart');     
 
-        $cobros = DB::table('cobros')
+       /* $cobros = DB::table('cobros')
           ->select('cobros.id as id_cobro','cobros.id_alumno','id_user','cobros.id_ciclo_escolar','id_cuenta_asignada','id_planpagoconcepto','cantidad_inicial','descuento_pp','descuento_adicional','recargo','fecha_pago','cobros.status','planpagoconceptos.mes_pagar','planpagoconceptos.cantidad','planpagoconceptos.id_concepto_cobro','apaterno','amaterno','nombres','conceptocobros.descripcion','becaalumnos.id_beca','becas.codigo','becas.porc_o_cant','becas.cantidad as cant_beca','cobros.cantidad as cantidad_pagada','cobros.tipo_pago','cobros.forma_pago')
           ->join('cuentaasignadas', 'cobros.id_cuenta_asignada', '=', 'cuentaasignadas.id')
           ->join('planpagoconceptos', 'cuentaasignadas.id_plan_concepto_cobro', '=', 'planpagoconceptos.id')
@@ -231,6 +232,20 @@ class CobroController extends Controller
           ->whereDate('cobros.fecha_pago','>=',$fecha1)
           ->whereDate('cobros.fecha_pago','<=',$fecha2)
          // ->where('cobros.id_ciclo_escolar',$id_session_ciclo)
+          ->get();*/
+
+          $cobros = DB::table('cobros')
+          ->select('cobros.id as id_cobro','cobros.id_alumno','id_user','cobros.id_ciclo_escolar','id_cuenta_asignada','id_planpagoconcepto','cantidad_inicial','descuento_pp','descuento_adicional','recargo','fecha_pago','cobros.status','cobros.tipo_pago','planpagoconceptos.mes_pagar','planpagoconceptos.cantidad','planpagoconceptos.id_concepto_cobro','apaterno','amaterno','nombres','conceptocobros.descripcion','becaalumnos.id_beca','becas.codigo','becas.porc_o_cant','becas.cantidad as cant_beca','cobros.cantidad as cantidad_pagada','cobros.forma_pago')
+          ->join('cuentaasignadas', 'cobros.id_cuenta_asignada', '=', 'cuentaasignadas.id')
+          ->join('planpagoconceptos', 'cuentaasignadas.id_plan_concepto_cobro', '=', 'planpagoconceptos.id')
+          ->join('conceptocobros', 'planpagoconceptos.id_concepto_cobro', '=', 'conceptocobros.id')
+          ->join('alumnos', 'cobros.id_alumno', '=', 'alumnos.id')
+          ->leftjoin('becaalumnos', 'cobros.id_cuenta_asignada', '=', 'becaalumnos.id_cuentaasignada')
+          ->leftjoin('becas', 'becaalumnos.id_beca', '=', 'becas.id')
+          ->whereDate('cobros.fecha_pago','>=',$fecha1)
+          ->whereDate('cobros.fecha_pago','<=',$fecha2)
+          ->where('cobros.id_ciclo_escolar',$id_session_ciclo)
+          ->groupBy('id_cobro')
           ->get();
 
           $data = [
