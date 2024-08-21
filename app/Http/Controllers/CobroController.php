@@ -199,7 +199,7 @@ class CobroController extends Controller
           ->leftjoin('becas', 'becaalumnos.id_beca', '=', 'becas.id')
           ->whereDate('cobros.fecha_pago','>=',$fecha1)
           ->whereDate('cobros.fecha_pago','<=',$fecha2)
-          ->where('cobros.id_ciclo_escolar',$id_session_ciclo)
+          //->where('cobros.id_ciclo_escolar',$id_session_ciclo)
           ->groupBy('id_cobro')
           ->get();
 
@@ -212,7 +212,7 @@ class CobroController extends Controller
           ->leftjoin('becas', 'becaalumnos.id_beca', '=', 'becas.id')
           ->whereDate('cobroparcials.fecha_pago','>=',$fecha1)
           ->whereDate('cobroparcials.fecha_pago','<=',$fecha2)
-          ->where('cobroparcials.id_ciclo_escolar',$id_session_ciclo)
+          //->where('cobroparcials.id_ciclo_escolar',$id_session_ciclo)
           ->get();
         return response()->json(['cobros'=>$cobros ,'cobrosparciales'=>$cobrosparciales]);
     }
@@ -244,7 +244,7 @@ class CobroController extends Controller
           ->leftjoin('becas', 'becaalumnos.id_beca', '=', 'becas.id')
           ->whereDate('cobros.fecha_pago','>=',$fecha1)
           ->whereDate('cobros.fecha_pago','<=',$fecha2)
-          ->where('cobros.id_ciclo_escolar',$id_session_ciclo)
+          //->where('cobros.id_ciclo_escolar',$id_session_ciclo)
           ->groupBy('id_cobro')
           ->get();
 
